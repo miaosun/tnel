@@ -13,9 +13,9 @@ import jade.lang.acl.ACLMessage;
 @SuppressWarnings("serial")
 public class InitiatorBehaviour extends BaseBehaviour{
 	
-	public final int INFORM = 1;
-	public final int 	CFP		= 2;
-	public final int	SEND_PROPOSAL	= 3;
+	public final int INFORM 		= 1;
+	public final int CFP			= 2;
+	public final int SEND_PROPOSAL	= 3;
 	public final int	GET_REPLY		= 4;
 	
 	private ArrayList<AID>	participants = new ArrayList<>();
