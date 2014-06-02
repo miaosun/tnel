@@ -1,5 +1,6 @@
 import java.util.Vector;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
@@ -19,6 +20,9 @@ public class FIPARequestInitiatorAgent extends Agent {
 		protected Vector<ACLMessage> prepareRequests(ACLMessage msg) {
 			Vector<ACLMessage> v = new Vector<ACLMessage>();
 			// ...
+			msg.setContent("Hello JADE\n");
+			msg.addReceiver(new AID("responder", false));
+			v.add(msg);
 			return v;
 		}
 		

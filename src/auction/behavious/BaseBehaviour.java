@@ -6,10 +6,16 @@ import jade.lang.acl.ACLMessage;
 
 @SuppressWarnings("serial")
 abstract class BaseBehaviour extends SimpleBehaviour{
-
 	
+	protected int state;
 	
-	protected void send(AID receiverAgent, String content, int type)
+	public BaseBehaviour() {
+		
+	}
+	
+	public abstract void action();
+	
+	protected void send1(AID receiverAgent, String content, int type)
 	{
 		ACLMessage msg = new ACLMessage(type);
 		msg.setContent(content);

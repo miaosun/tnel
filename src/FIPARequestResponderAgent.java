@@ -18,12 +18,14 @@ public class FIPARequestResponderAgent extends Agent {
 		protected ACLMessage handleRequest(ACLMessage request) {
 			ACLMessage reply = request.createReply();
 			// ...
+			reply.setPerformative(ACLMessage.AGREE);
 			return reply;
 		}
 		
 		protected ACLMessage prepareResultNotification(ACLMessage request, ACLMessage response) {
 			ACLMessage result = request.createReply();
 			// ...
+			result.setPerformative(ACLMessage.INFORM);
 			return result;
 		}
 
