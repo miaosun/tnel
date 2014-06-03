@@ -20,19 +20,20 @@ public class InitiatorBehaviour extends BaseBehaviour{
 	public final int GET_PROPOSE	= 3;
 	public final int END			= 4;
 
-	private final int TIMEOUT	= 60;
+	//private final int TIMEOUT	= 60;
 
 	private ArrayList<AID>	participants = new ArrayList<>();
 	private double priceIteration = 0;
 	private int round = 0;
+	
+	private AID winner = null;
 
-	private int lastCFPInSeconds;
+	//private int lastCFPInSeconds;
 
 	public InitiatorBehaviour(Product prod)
 	{
 		this.state = INFORM;
 		this.priceIteration = prod.getCommonPrice() * 0.2;
-		round = 1;
 	}
 
 
@@ -83,19 +84,20 @@ public class InitiatorBehaviour extends BaseBehaviour{
 	}
 
 	public void callForProposal() {
-
+		round++;
 		System.out.println("ROUND "+ round + ": Call for proposal");
 		send(participants, "Previous winning price: "+priceIteration+ "€", ACLMessage.CFP);
 
-		Calendar calendar = Calendar.getInstance();
-		lastCFPInSeconds = calendar.get(Calendar.SECOND);
+		//Calendar calendar = Calendar.getInstance();
+		//lastCFPInSeconds = calendar.get(Calendar.SECOND);
+		state = GET_PROPOSE;
 	}
 
 	public void getPropose() {
 
 		//se passar timeout, state = END;
 		//se nao, defina o preco base da iteracao como o valor vencidor da iteracao anterior, e state = CFP
-
+		/*
 		boolean b = true;
 		for(int i=0; i<participants.size(); i++)
 		{
@@ -109,18 +111,40 @@ public class InitiatorBehaviour extends BaseBehaviour{
 				}
 				b = false;
 			}
-			
+		 */		
 
-			if(msg.getPerformative() == ACLMessage.PROPOSE) {
+		for(int i=0; i<participants.size(); i++)
+		{
+			ACLMessage msg = this.myAgent.blockingReceive();
+			if(msg.getPerformative() == ACLMessage.REFUSE)
+			{
+				participants.remove(msg.getSender());
+			}
+
+			else if(msg.getPerformative() == ACLMessage.PROPOSE) {
 
 				double bidPrice = Double.parseDouble(msg.getContent());
 				System.out.println("   " + this.myAgent.getLocalName() + ": recebi proposta do " + msg.getSender().getName() +" com valor "+ bidPrice + "€");
-				
+
 				if(bidPrice > priceIteration)
+				{
 					priceIteration = bidPrice;
+					winner = msg.getSender();
+				}
 			}
+
 		}
-		state = CFP;
+		if(participants.size() == 0)
+		{
+			state = END;
+		}
+		else if(participants.size() == 1)
+		{
+			winner = participants.get(0);
+			state = END;
+		}
+		else
+			state = CFP;
 	}
 
 	@Override
