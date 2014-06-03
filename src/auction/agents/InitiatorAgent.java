@@ -34,7 +34,7 @@ public class InitiatorAgent extends BaseAgent{
 		for(Product prod : productToSell)
 		{
 			System.out.println("[English] Auction for Product " + prod.getProductName() + " started!\n");
-			addBehaviour(new InitiatorBehaviour(prod));
+			addBehaviour(new InitiatorBehaviour(this, prod));
 		}
 	}
 

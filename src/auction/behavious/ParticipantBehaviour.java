@@ -33,6 +33,8 @@ public class ParticipantBehaviour extends BaseBehaviour{
 		this.pa = pa;
 		state = GETINFORM;
 		interestedProduct = pa.getInterestedProduct();
+		
+		System.out.println("Participant Agent: "+ pa.getLocalName());
 	}
 	
 	
@@ -53,13 +55,13 @@ public class ParticipantBehaviour extends BaseBehaviour{
 			refuse();
 			break;
 		default:
-			System.out.println("Working...");
+			System.out.println("pat: Working...");
 		}
 		
 	}
 	
 	public void isInterested() {
-		ACLMessage msg = this.myAgent.blockingReceive();
+		ACLMessage msg = pa.blockingReceive();
 		if(msg.getPerformative() == ACLMessage.INFORM)
 		{
 			initiator = msg.getSender();
@@ -77,27 +79,28 @@ public class ParticipantBehaviour extends BaseBehaviour{
 	}
 	
 	public void getCFP() {
-		System.out.println("Get CFP!");
-		ACLMessage msg = this.myAgent.blockingReceive();
+
+		ACLMessage msg = pa.blockingReceive();
+
 		if(msg.getPerformative() == ACLMessage.CFP)
 		{
 			String message = msg.getContent();
+						
 			int index = message.indexOf("Winner:"); 
-			
 			if(index > 0)
 			{
-				String lastWinnerName = message.substring(index+8, message.length()-1);
-				System.out.println("Last Winner Name:"+lastWinnerName);
-				System.out.println("Base Price:"+message.substring(11,message.indexOf('€')));
-				basePrice = Double.parseDouble(message.substring(11,message.indexOf('€')));
+				basePrice = Double.parseDouble(message.substring(12,message.indexOf(',')));
+				System.out.println("pat: Base Price:"+basePrice);
 				
-				if(pa.getName() != lastWinnerName)
+				String lastWinnerName = message.substring(index+8, message.length()-1);
+				System.out.println("pat: Last Winner Name:"+lastWinnerName);
+				
+				if(pa.getLocalName() != lastWinnerName)
 				{			
 					if(basePrice >= maxPrice)
 						state = REFUSE;
 					else
-					{
-						
+					{	
 						state = PROPOSE;
 					}
 				}
@@ -105,19 +108,33 @@ public class ParticipantBehaviour extends BaseBehaviour{
 					isLastWinner = true;
 					state = PROPOSE;
 				}
-			}	
+			}
+			else {
+				basePrice = Double.parseDouble(message.substring(12,message.length()));
+				System.out.println("pat: Base Price:"+basePrice);
+				state = PROPOSE;
+			}
 		}
+		else
+			System.out.println("pat: Participant Behaviour->getCFP: Not INFORM message!");
 	}
 	
 	public void propose() {
 		ACLMessage msg = new ACLMessage(ACLMessage.PROPOSE);
 		msg.addReceiver(initiator);
 		if(isLastWinner)
+		{
 			msg.setContent(String.valueOf(basePrice));
+			System.out.println("pat: Participant: "+pa.getLocalName()+", price: "+basePrice);
+		}
 		else
-			msg.setContent(String.valueOf(basePrice+Utils.getRandomNumber(1, 11)));
+		{
+			basePrice += Utils.getRandomNumber(1, 11);
+			msg.setContent(String.valueOf(basePrice));
+			System.out.println("pat: Participant: "+pa.getLocalName()+", price: "+basePrice);
+		}
 		
-		this.myAgent.send(msg);
+		pa.send(msg);
 		
 		state = GETCFP;
 	}
@@ -125,7 +142,8 @@ public class ParticipantBehaviour extends BaseBehaviour{
 	public void refuse() {
 		ACLMessage msg = new ACLMessage(ACLMessage.REFUSE);
 		msg.addReceiver(initiator);
-		this.myAgent.send(msg);
+		System.out.println("pat: Not interested or don't have enough money or don't want to pay that much!");
+		pa.send(msg);
 		
 		state = END;
 	}
