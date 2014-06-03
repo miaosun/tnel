@@ -1,13 +1,10 @@
 package auction.agents;
 
-import jade.core.behaviours.CyclicBehaviour;
-import jade.lang.acl.ACLMessage;
-
 import java.util.HashMap;
 import java.util.Map;
 
-import auction.behavious.ParticipantBehaviour;
 import utils.Utils;
+import auction.behavious.ParticipantBehaviour;
 
 @SuppressWarnings("serial")
 public class ParticipantAgent extends BaseAgent{
@@ -18,7 +15,7 @@ public class ParticipantAgent extends BaseAgent{
 	private static int money;
 
 	//Interested product with the max price willing to pay
-	private static Map<String, Integer> interestedProduct = new HashMap<String, Integer>();
+	private Map<String, Integer> interestedProduct = new HashMap<String, Integer>();
 
 	public ParticipantAgent()
 	{
@@ -37,7 +34,7 @@ public class ParticipantAgent extends BaseAgent{
 	{
 		super.setup();
 
-		addBehaviour(new ParticipantBehaviour());
+		addBehaviour(new ParticipantBehaviour(this));
 	}
 
 
@@ -45,6 +42,10 @@ public class ParticipantAgent extends BaseAgent{
 	public String getType() {
 		
 		return this.type;
+	}
+	
+	public Map<String, Integer> getInterestedProduct() {
+		return this.interestedProduct;
 	}
 
 }

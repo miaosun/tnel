@@ -20,11 +20,11 @@ public class InitiatorAgent extends BaseAgent{
 
 	public InitiatorAgent()
 	{
-		productToSell.add(new Product("Smartphone", 300));
-		productToSell.add(new Product("Tablet", 400));
-		productToSell.add(new Product("Laptop", 800));
+		productToSell.add(new Product("SmartPhone", 300));
+	/*	productToSell.add(new Product("Tablet", 400));
+		productToSell.add(new Product("Laptop", 800));*/
 
-		System.out.println("Iniciator constructor!");
+		System.out.println("Iniciator started working!");
 	}
 	
 	@Override
@@ -33,6 +33,7 @@ public class InitiatorAgent extends BaseAgent{
 		super.setup();
 		for(Product prod : productToSell)
 		{
+			System.out.println("[English] Auction for Product " + prod.getProductName() + " started!\n");
 			addBehaviour(new InitiatorBehaviour(prod));
 		}
 	}

@@ -8,7 +8,6 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.lang.acl.ACLMessage;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import utils.Product;
 
@@ -71,7 +70,6 @@ public class InitiatorBehaviour extends BaseBehaviour{
 
 		try {
 			DFAgentDescription[] result = DFService.search(this.myAgent, template);
-			System.out.println("Nr of participants: "+result.length);
 
 			ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
 			for(int i=0; i<result.length; ++i)
@@ -81,18 +79,23 @@ public class InitiatorBehaviour extends BaseBehaviour{
 				//Iniciar a lista de participantes
 				participants.add(receiver);
 			}
-			msg.setContent("English Auctin is gonna start!");
+			msg.setContent("Product: " + prod.getProductName() + " !");
+			System.out.println("Product: " + prod.getProductName() + " !");
 			this.myAgent.send(msg);
 
 		} catch(FIPAException e) { e.printStackTrace(); }
-
+		System.out.println("End of Inform Auction!");
 		state = CFP;
 	}
 
 	public void callForProposal() {
+		System.out.println("Inicial of Call for proposal!");
 		round++;
 		System.out.println("ROUND "+ round + ": Call for proposal");
-		send(participants, "Previous winning price: "+priceIteration+ "€", ACLMessage.CFP);
+		if(round == 1)
+			send(participants, "Base Price: "+priceIteration, ACLMessage.CFP);
+		else
+			send(participants, "Base Price: "+priceIteration+ ", Winner: " + winner.getName() + "!", ACLMessage.CFP);
 
 		//Calendar calendar = Calendar.getInstance();
 		//lastCFPInSeconds = calendar.get(Calendar.SECOND);
@@ -130,7 +133,7 @@ public class InitiatorBehaviour extends BaseBehaviour{
 			else if(msg.getPerformative() == ACLMessage.PROPOSE) {
 
 				double bidPrice = Double.parseDouble(msg.getContent());
-				System.out.println("   " + this.myAgent.getLocalName() + ": recebi proposta do " + msg.getSender().getName() +" com valor "+ bidPrice + "€");
+				System.out.println("   " + this.myAgent.getLocalName() + ": recebi proposta do " + msg.getSender().getName() +" com valor "+ bidPrice);
 
 				if(bidPrice > priceIteration)
 				{
@@ -138,7 +141,6 @@ public class InitiatorBehaviour extends BaseBehaviour{
 					winner = msg.getSender();
 				}
 			}
-
 		}
 		if(participants.size() == 0)
 		{
@@ -155,8 +157,7 @@ public class InitiatorBehaviour extends BaseBehaviour{
 	
 
 	private void requestPayment() {
-		// TODO Auto-generated method stub
-		send(participants, "Auction for product " + prod.getProductName() + " ended, the winner is "+ winner.getName() + " with price " + priceIteration+ "€", ACLMessage.INFORM);
+		send(participants, "Auction for product " + prod.getProductName() + " ended, the winner is "+ winner.getName() + " with price " + priceIteration, ACLMessage.INFORM);
 		
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 
