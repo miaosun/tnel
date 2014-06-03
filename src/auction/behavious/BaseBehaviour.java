@@ -1,5 +1,7 @@
 package auction.behavious;
 
+import java.util.ArrayList;
+
 import jade.core.AID;
 import jade.core.behaviours.SimpleBehaviour;
 import jade.lang.acl.ACLMessage;
@@ -15,24 +17,26 @@ abstract class BaseBehaviour extends SimpleBehaviour{
 	
 	public abstract void action();
 	
-	protected void send1(AID receiverAgent, String content, int type)
-	{
+	protected void send(ArrayList<AID> receiverAgent, String content, int type)
+	{			
 		ACLMessage msg = new ACLMessage(type);
 		msg.setContent(content);
-		msg.addReceiver(receiverAgent);
-		
+		for(AID rcv : receiverAgent)
+		{
+			msg.addReceiver(rcv);
+		}
 		this.myAgent.send(msg);
 	}
 	
 	
-	protected void replay(AID receiverAgent, String content, int type, String replayTo)
+	protected void reply(AID receiverAgent, String content, int type, String replayTo)
 	{
-		ACLMessage replay = new ACLMessage(type);
-		replay.setContent(content);
-		replay.addReceiver(receiverAgent);
-		replay.setInReplyTo(replayTo);
+		ACLMessage reply = new ACLMessage(type);
+		reply.setContent(content);
+		reply.addReceiver(receiverAgent);
+		reply.setInReplyTo(replayTo);
 		
-		this.myAgent.send(replay);
+		this.myAgent.send(reply);
 	}
 	
 	

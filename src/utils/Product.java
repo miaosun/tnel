@@ -5,6 +5,12 @@ public class Product {
 	private String productName;
 	private double commonPrice;
 	
+	public Product(String productName, double commonPrice)
+	{
+		this.productName = productName;
+		this.commonPrice = commonPrice;
+	}
+	
 	public String getProductName() {
 		return productName;
 	}

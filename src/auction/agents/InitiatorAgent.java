@@ -1,12 +1,14 @@
 package auction.agents;
 
-import jade.core.behaviours.CyclicBehaviour;
+import jade.core.AID;
 import jade.lang.acl.ACLMessage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import utils.Product;
 import auction.behavious.InitiatorBehaviour;
 
 
@@ -18,13 +20,15 @@ public class InitiatorAgent extends BaseAgent{
 	public static final int	AUCTION_TIMEOUT		= 500;
 
 	//Product to sell with initial price
-	private static Map<String, Integer> productToSell = new HashMap<String, Integer>();
+	//private static Map<String, Integer> productToSell = new HashMap<String, Integer>();
 	
+	private ArrayList<Product> productToSell = new ArrayList<>();
+
 	public InitiatorAgent()
 	{
-		productToSell.put("SmartPhone", 300);
-		productToSell.put("Tablet", 400);
-		productToSell.put("Laptop", 600);
+		productToSell.add(new Product("Smartphone", 300));
+		productToSell.add(new Product("Tablet", 400));
+		productToSell.add(new Product("Laptop", 800));
 
 		System.out.println("Iniciator constructor!");
 	}
@@ -33,7 +37,10 @@ public class InitiatorAgent extends BaseAgent{
 	protected void setup()
 	{
 		super.setup();
-		addBehaviour(new InitiatorBehaviour());
+		for(Product prod : productToSell)
+		{
+			addBehaviour(new InitiatorBehaviour(prod));
+		}
 	}
 	
 	
