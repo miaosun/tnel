@@ -34,7 +34,7 @@ public class ParticipantBehaviour extends BaseBehaviour{
 		state = GETINFORM;
 		interestedProduct = pa.getInterestedProduct();
 		
-		System.out.println(pa.getLocalName()+": [Participant] Agent Behaviour");
+		System.out.println(pa.getLocalName()+": [Participant] The money I have: "+pa.getMoney());
 	}
 	
 	
@@ -84,7 +84,7 @@ public class ParticipantBehaviour extends BaseBehaviour{
 
 		if(msg.getPerformative() == ACLMessage.CFP)
 		{
-			System.out.println("[Product ]"+prodName+"]\n"+pa.getLocalName()+": [Participant] Geting Call For Proposal...");
+			System.out.println("[Product: "+prodName+"]\n"+pa.getLocalName()+": [Participant] Geting Call For Proposal...");
 			String message = msg.getContent();
 						
 			int index = message.indexOf("Winner:"); 
@@ -121,10 +121,10 @@ public class ParticipantBehaviour extends BaseBehaviour{
 		else if(msg.getPerformative() == ACLMessage.REQUEST)
 		{
 			pa.setMoney(pa.getMoney() - basePrice);
-			System.out.println("[Product ]"+prodName+"]\n"+pa.getLocalName()+" [WINNER]: Product purchased successfully...  Money left: "+pa.getMoney());
+			System.out.println("[Product: "+prodName+"]\n"+pa.getLocalName()+" [WINNER]: Product purchased successfully...  Money left: "+pa.getMoney());
 		}
 		else
-			System.out.println("[Product ]"+prodName+"]\n"+pa.getLocalName()+" [WINNER]: Participant Behaviour->getCFP: Not INFORM message!");
+			System.out.println("[Product: "+prodName+"]\n"+pa.getLocalName()+" [WINNER]: Participant Behaviour->getCFP: Not INFORM message!");
 	}
 	
 	public void propose() {
@@ -135,13 +135,13 @@ public class ParticipantBehaviour extends BaseBehaviour{
 		if(isLastWinner)
 		{
 			msg.setContent(String.valueOf(basePrice));
-			System.out.println("[Product ]"+prodName+"]\n"+pa.getLocalName()+": [Participant],  Price: "+basePrice);
+			System.out.println("[Product: "+prodName+"]\n"+pa.getLocalName()+": [Participant],  Price: "+basePrice);
 		}
 		else
 		{
 			basePrice += Utils.getRandomNumber(1, 11);
 			msg.setContent(String.valueOf(basePrice));
-			System.out.println("[Product ]"+prodName+"]\n"+pa.getLocalName()+": [Participant],  Price: "+basePrice);
+			System.out.println("[Product: "+prodName+"]\n"+pa.getLocalName()+": [Participant],  Price: "+basePrice);
 		}
 		
 		pa.send(msg);
@@ -152,7 +152,7 @@ public class ParticipantBehaviour extends BaseBehaviour{
 	public void refuse() {
 		ACLMessage msg = new ACLMessage(ACLMessage.REFUSE);
 		msg.addReceiver(initiator);
-		System.out.println("[Product ]"+prodName+"]\n"+pa.getLocalName()+": Not interested or don't have enough money or don't want to pay that much!\n");
+		System.out.println("[Product: "+prodName+"]\n"+pa.getLocalName()+": Not interested or don't have enough money or don't want to pay that much!\n");
 		pa.send(msg);
 		
 		state = END;

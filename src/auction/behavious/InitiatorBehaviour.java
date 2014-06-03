@@ -97,7 +97,7 @@ public class InitiatorBehaviour extends BaseBehaviour{
 	public void callForProposal() {
 		
 		round++;
-		System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator] : ROUND "+ round + ": Call for proposal...");
+		System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator] : ROUND "+ round + ": Call for proposal...\n");
 		if(round == 1)
 		{
 			send(participants, "Base Price: "+priceIteration, ACLMessage.CFP);

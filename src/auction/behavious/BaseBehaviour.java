@@ -27,22 +27,5 @@ abstract class BaseBehaviour extends SimpleBehaviour{
 		}
 		this.myAgent.send(msg);
 	}
-	
-	
-	protected void reply(AID receiverAgent, String content, int type, String replayTo)
-	{
-		ACLMessage reply = new ACLMessage(type);
-		reply.setContent(content);
-		reply.addReceiver(receiverAgent);
-		reply.setInReplyTo(replayTo);
-		
-		this.myAgent.send(reply);
-	}
-	
-	
-	
-	
-	
-	
-	
+
 }

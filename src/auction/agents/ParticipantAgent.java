@@ -25,7 +25,7 @@ public class ParticipantAgent extends BaseAgent{
 
 		money = Utils.getRandomNumber(800, 2000);
 
-		System.out.println("The money I have: " + money);
+		//System.out.println(": [Participant] The money I have: " + money);
 
 	}
 
