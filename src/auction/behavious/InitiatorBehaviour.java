@@ -38,7 +38,7 @@ public class InitiatorBehaviour extends BaseBehaviour{
 		this.ia = ia;
 		this.state = INFORM;
 		this.prod = prod;
-		this.priceIteration = prod.getCommonPrice() * 0.2;
+		this.priceIteration = prod.getCommonPrice() * 0.3;
 	}
 
 
@@ -60,12 +60,13 @@ public class InitiatorBehaviour extends BaseBehaviour{
 			requestPayment();
 			break;
 		default:
-			System.out.println("   Ini: Working...");
+			System.out.println(ia.getLocalName()+" [Initiator]: Working...");
 		}
 	}
 
 	public void informAuction() {
 
+		System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator]: Informing about auction...");
 		DFAgentDescription template = new DFAgentDescription();
 		ServiceDescription sd1 = new ServiceDescription();
 		sd1.setType("Participant");
@@ -78,46 +79,45 @@ public class InitiatorBehaviour extends BaseBehaviour{
 			for(int i=0; i<result.length; ++i)
 			{
 				AID receiver = result[i].getName();   
-				System.out.println("   Ini: inform Auction receiver name: "+receiver.getLocalName());
+				System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator]: inform Auction receiver name: "+receiver.getLocalName());
 				msg.addReceiver(receiver);
 				//Iniciar a lista de participantes
 				participants.add(receiver);
 			}
 			msg.setContent("Product: " + prod.getProductName() + " !");
-			System.out.println("   Ini: \n\t\tProduct: " + prod.getProductName() + " !");
+			System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator]: Product: " + prod.getProductName() + " !");
 			ia.send(msg);
 
 		} catch(FIPAException e) { e.printStackTrace(); }
 		
-		System.out.println("\n   Ini: End of Inform Auction!\n");
+		//System.out.println("\n   Ini: End of Inform Auction!\n");
 		state = CFP;
 	}
 
 	public void callForProposal() {
-		System.out.println("\n   Ini: Inicial of Call for proposal!\n");
 		
 		round++;
-		System.out.println("\n   Ini: ROUND "+ round + ": [Call for proposal]\n");
+		System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator] : ROUND "+ round + ": Call for proposal...");
 		if(round == 1)
 		{
 			send(participants, "Base Price: "+priceIteration, ACLMessage.CFP);
-			System.out.println("   Ini: Base Price: "+priceIteration+"\n");
+			System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator]: Base Price: ["+priceIteration+"]");
 		}
 		else
 		{
 			send(participants, "Base Price: "+priceIteration+ ", Winner: " + winner.getLocalName() + "!", ACLMessage.CFP);
-			System.out.println("   Ini: Base Price: "+priceIteration+ ", Winner: " + winner.getLocalName() + "!\n");
+			System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator]: Base Price: ["+priceIteration+ "], Winner: [" + winner.getLocalName() + "]");
 		}
 		
 
 		//Calendar calendar = Calendar.getInstance();
 		//lastCFPInSeconds = calendar.get(Calendar.SECOND);
-		System.out.println("   Ini: End of Call for proposal!\n");
+		//System.out.println("   Ini: End of Call for proposal!\n");
 		state = GET_PROPOSE;
 	}
 
 	public void getPropose() {
-		System.out.println("   Ini: Inicial of getPropose!\n");
+		System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator]: Geting Proposals...");
 		//se passar timeout, state = END;
 		//se nao, defina o preco base da iteracao como o valor vencidor da iteracao anterior, e state = CFP
 		/*
@@ -135,7 +135,8 @@ public class InitiatorBehaviour extends BaseBehaviour{
 				b = false;
 			}
 		 */		
-
+		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
+		
 		for(int i=0; i<participants.size(); i++)
 		{
 			ACLMessage msg = ia.blockingReceive();
@@ -147,7 +148,7 @@ public class InitiatorBehaviour extends BaseBehaviour{
 			else if(msg.getPerformative() == ACLMessage.PROPOSE) {
 
 				double bidPrice = Double.parseDouble(msg.getContent());
-				System.out.println("   Ini: " + ia.getLocalName() + ": received propose from " + msg.getSender().getLocalName() +" with price "+ bidPrice+"\n");
+				System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName() + " [Initiator]: received propose from " + msg.getSender().getLocalName() +" with price "+ bidPrice+"\n");
 
 				if(bidPrice > priceIteration)
 				{
@@ -172,14 +173,14 @@ public class InitiatorBehaviour extends BaseBehaviour{
 
 	private void requestPayment() {
 		send(participants, "Auction for product " + prod.getProductName() + " ended, the winner is "+ winner.getLocalName() + " with price " + priceIteration, ACLMessage.INFORM);
-		System.out.println("\n   Ini: Auction for product " + prod.getProductName() + " ended, the winner is "+ winner.getLocalName() + " with price " + priceIteration+"\n");
+		System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator]: Auction for product " + prod.getProductName() + " ended, the winner is ["+ winner.getLocalName() + "] with price [" + priceIteration+"]\n");
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 
         msg.addReceiver(winner);
         msg.setContent("pong");
         ia.send(msg);
         
-        System.out.println("\n   Ini: The Winner is " + winner.getLocalName()+"\n");
+        //System.out.println("\n   Ini: The Winner is " + winner.getLocalName()+"\n");
         state = END;
 	}
 

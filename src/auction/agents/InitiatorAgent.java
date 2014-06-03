@@ -20,9 +20,9 @@ public class InitiatorAgent extends BaseAgent{
 
 	public InitiatorAgent()
 	{
-		productToSell.add(new Product("SmartPhone", 300));
-	/*	productToSell.add(new Product("Tablet", 400));
-		productToSell.add(new Product("Laptop", 800));*/
+		productToSell.add(new Product("SmartPhone", 200));
+		productToSell.add(new Product("Tablet", 300));
+		productToSell.add(new Product("Laptop", 600));
 
 		System.out.println("Iniciator started working!");
 	}

@@ -12,16 +12,16 @@ public class ParticipantAgent extends BaseAgent{
 	public final String type = "Participant";
 
 	//Money the participant has
-	private static int money;
+	private double money;
 
 	//Interested product with the max price willing to pay
 	private Map<String, Integer> interestedProduct = new HashMap<String, Integer>();
 
 	public ParticipantAgent()
 	{
-		interestedProduct.put("SmartPhone", Utils.getRandomNumber(300,500));
-		interestedProduct.put("Tablet", Utils.getRandomNumber(400,600));
-		interestedProduct.put("Laptop", Utils.getRandomNumber(700,900));
+		interestedProduct.put("SmartPhone", Utils.getRandomNumber(300,400));
+		interestedProduct.put("Tablet", Utils.getRandomNumber(400,500));
+		interestedProduct.put("Laptop", Utils.getRandomNumber(700,800));
 
 		money = Utils.getRandomNumber(800, 2000);
 
@@ -48,4 +48,13 @@ public class ParticipantAgent extends BaseAgent{
 		return this.interestedProduct;
 	}
 
+	public double getMoney()
+	{
+		return this.money;
+	}
+	
+	public void setMoney(double money)
+	{
+		this.money = money;
+	}
 }
