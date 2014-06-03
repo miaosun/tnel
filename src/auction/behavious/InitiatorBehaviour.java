@@ -84,40 +84,40 @@ public class InitiatorBehaviour extends BaseBehaviour{
 				participants.add(receiver);
 			}
 			msg.setContent("Product: " + prod.getProductName() + " !");
-			System.out.println("   Ini: Product: " + prod.getProductName() + " !");
+			System.out.println("   Ini: \n\t\tProduct: " + prod.getProductName() + " !");
 			ia.send(msg);
 
 		} catch(FIPAException e) { e.printStackTrace(); }
 		
-		System.out.println("   Ini: End of Inform Auction!");
+		System.out.println("\n   Ini: End of Inform Auction!\n");
 		state = CFP;
 	}
 
 	public void callForProposal() {
-		System.out.println("   Ini: Inicial of Call for proposal!");
+		System.out.println("\n   Ini: Inicial of Call for proposal!\n");
 		
 		round++;
-		System.out.println("   Ini: ROUND "+ round + ": Call for proposal");
+		System.out.println("\n   Ini: ROUND "+ round + ": [Call for proposal]\n");
 		if(round == 1)
 		{
 			send(participants, "Base Price: "+priceIteration, ACLMessage.CFP);
-			System.out.println("   Ini: Base Price: "+priceIteration);
+			System.out.println("   Ini: Base Price: "+priceIteration+"\n");
 		}
 		else
 		{
 			send(participants, "Base Price: "+priceIteration+ ", Winner: " + winner.getLocalName() + "!", ACLMessage.CFP);
-			System.out.println("   Ini: Base Price: "+priceIteration+ ", Winner: " + winner.getLocalName() + "!");
+			System.out.println("   Ini: Base Price: "+priceIteration+ ", Winner: " + winner.getLocalName() + "!\n");
 		}
 		
 
 		//Calendar calendar = Calendar.getInstance();
 		//lastCFPInSeconds = calendar.get(Calendar.SECOND);
-		System.out.println("   Ini: End of Call for proposal!");
+		System.out.println("   Ini: End of Call for proposal!\n");
 		state = GET_PROPOSE;
 	}
 
 	public void getPropose() {
-		System.out.println("   Ini: Inicial of getPropose!");
+		System.out.println("   Ini: Inicial of getPropose!\n");
 		//se passar timeout, state = END;
 		//se nao, defina o preco base da iteracao como o valor vencidor da iteracao anterior, e state = CFP
 		/*
@@ -147,7 +147,7 @@ public class InitiatorBehaviour extends BaseBehaviour{
 			else if(msg.getPerformative() == ACLMessage.PROPOSE) {
 
 				double bidPrice = Double.parseDouble(msg.getContent());
-				System.out.println("   Ini: " + ia.getLocalName() + ": received propose from " + msg.getSender().getLocalName() +" with price "+ bidPrice);
+				System.out.println("   Ini: " + ia.getLocalName() + ": received propose from " + msg.getSender().getLocalName() +" with price "+ bidPrice+"\n");
 
 				if(bidPrice > priceIteration)
 				{
@@ -172,7 +172,7 @@ public class InitiatorBehaviour extends BaseBehaviour{
 
 	private void requestPayment() {
 		send(participants, "Auction for product " + prod.getProductName() + " ended, the winner is "+ winner.getLocalName() + " with price " + priceIteration, ACLMessage.INFORM);
-		System.out.println("   Ini: Auction for product " + prod.getProductName() + " ended, the winner is "+ winner.getLocalName() + " with price " + priceIteration);
+		System.out.println("\n   Ini: Auction for product " + prod.getProductName() + " ended, the winner is "+ winner.getLocalName() + " with price " + priceIteration+"\n");
 		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
 
         msg.addReceiver(winner);

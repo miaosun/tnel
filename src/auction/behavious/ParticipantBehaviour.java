@@ -34,7 +34,7 @@ public class ParticipantBehaviour extends BaseBehaviour{
 		state = GETINFORM;
 		interestedProduct = pa.getInterestedProduct();
 		
-		System.out.println("Participant Agent: "+ pa.getLocalName());
+		System.out.println(pa.getLocalName()+": Participant Agent");
 	}
 	
 	
@@ -55,7 +55,7 @@ public class ParticipantBehaviour extends BaseBehaviour{
 			refuse();
 			break;
 		default:
-			System.out.println("pat: Working...");
+			System.out.println(pa.getLocalName()+": Working...");
 		}
 		
 	}
@@ -90,10 +90,10 @@ public class ParticipantBehaviour extends BaseBehaviour{
 			if(index > 0)
 			{
 				basePrice = Double.parseDouble(message.substring(12,message.indexOf(',')));
-				System.out.println("pat: Base Price:"+basePrice);
+				System.out.println(pa.getLocalName()+": Base Price:"+basePrice);
 				
 				String lastWinnerName = message.substring(index+8, message.length()-1);
-				System.out.println("pat: Last Winner Name:"+lastWinnerName);
+				System.out.println(pa.getLocalName()+": Last Winner Name:"+lastWinnerName);
 				
 				if(pa.getLocalName() != lastWinnerName)
 				{			
@@ -111,12 +111,12 @@ public class ParticipantBehaviour extends BaseBehaviour{
 			}
 			else {
 				basePrice = Double.parseDouble(message.substring(12,message.length()));
-				System.out.println("pat: Base Price:"+basePrice);
+				System.out.println(pa.getLocalName()+": Base Price:"+basePrice);
 				state = PROPOSE;
 			}
 		}
 		else
-			System.out.println("pat: Participant Behaviour->getCFP: Not INFORM message!");
+			System.out.println(pa.getLocalName()+": Participant Behaviour->getCFP: Not INFORM message!");
 	}
 	
 	public void propose() {
@@ -125,13 +125,13 @@ public class ParticipantBehaviour extends BaseBehaviour{
 		if(isLastWinner)
 		{
 			msg.setContent(String.valueOf(basePrice));
-			System.out.println("pat: Participant: "+pa.getLocalName()+", price: "+basePrice);
+			System.out.println(pa.getLocalName()+": Participant,  price: "+basePrice);
 		}
 		else
 		{
 			basePrice += Utils.getRandomNumber(1, 11);
 			msg.setContent(String.valueOf(basePrice));
-			System.out.println("pat: Participant: "+pa.getLocalName()+", price: "+basePrice);
+			System.out.println(pa.getLocalName()+": Participant,  price: "+basePrice);
 		}
 		
 		pa.send(msg);
@@ -142,7 +142,7 @@ public class ParticipantBehaviour extends BaseBehaviour{
 	public void refuse() {
 		ACLMessage msg = new ACLMessage(ACLMessage.REFUSE);
 		msg.addReceiver(initiator);
-		System.out.println("pat: Not interested or don't have enough money or don't want to pay that much!");
+		System.out.println(pa.getLocalName()+": Not interested or don't have enough money or don't want to pay that much!\n");
 		pa.send(msg);
 		
 		state = END;
