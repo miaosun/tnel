@@ -18,7 +18,8 @@ public class InitiatorBehaviour extends BaseBehaviour{
 	public final int INFORM 		= 1;
 	public final int CFP			= 2;
 	public final int GET_PROPOSE	= 3;
-	public final int END			= 4;
+	public final int REQUEST		= 4;
+	public final int END			= 5;
 
 	//private final int TIMEOUT	= 60;
 
@@ -27,12 +28,14 @@ public class InitiatorBehaviour extends BaseBehaviour{
 	private int round = 0;
 	
 	private AID winner = null;
+	Product prod = null;
 
 	//private int lastCFPInSeconds;
 
 	public InitiatorBehaviour(Product prod)
 	{
 		this.state = INFORM;
+		this.prod = prod;
 		this.priceIteration = prod.getCommonPrice() * 0.2;
 	}
 
@@ -50,6 +53,9 @@ public class InitiatorBehaviour extends BaseBehaviour{
 			break;
 		case GET_PROPOSE:
 			getPropose();
+			break;
+		case REQUEST:
+			requestPayment();
 			break;
 		default:
 			System.out.println("Working...");
@@ -136,16 +142,32 @@ public class InitiatorBehaviour extends BaseBehaviour{
 		}
 		if(participants.size() == 0)
 		{
-			state = END;
+			state = REQUEST;
 		}
 		else if(participants.size() == 1)
 		{
 			winner = participants.get(0);
-			state = END;
+			state = REQUEST;
 		}
 		else
 			state = CFP;
 	}
+	
+
+	private void requestPayment() {
+		// TODO Auto-generated method stub
+		send(participants, "Auction for product " + prod.getProductName() + " ended, the winner is "+ winner.getName() + " with price " + priceIteration+ "€", ACLMessage.INFORM);
+		
+		ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
+
+        msg.addReceiver(winner);
+        msg.setContent("pong");
+        this.myAgent.send(msg);
+        
+        state = END;
+	}
+
+
 
 	@Override
 	public boolean done() {

@@ -6,6 +6,7 @@ import jade.lang.acl.ACLMessage;
 import java.util.HashMap;
 import java.util.Map;
 
+import auction.behavious.ParticipantBehaviour;
 import utils.Utils;
 
 @SuppressWarnings("serial")
@@ -36,30 +37,7 @@ public class ParticipantAgent extends BaseAgent{
 	{
 		super.setup();
 
-		addBehaviour(new ListeningBehaviour());
-	}
-
-
-	class ListeningBehaviour extends CyclicBehaviour {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		public void action() {
-			ACLMessage msg = receive();
-			if(msg != null) {
-				System.out.println(msg);
-				ACLMessage reply = msg.createReply();
-				reply.setPerformative(ACLMessage.INFORM);
-				reply.setContent("Got your message!");
-				send(reply);
-			} else {
-				block();
-			}
-		}
-
+		addBehaviour(new ParticipantBehaviour());
 	}
 
 

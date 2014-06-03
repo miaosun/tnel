@@ -1,12 +1,6 @@
 package auction.agents;
 
-import jade.core.AID;
-import jade.lang.acl.ACLMessage;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Vector;
 
 import utils.Product;
 import auction.behavious.InitiatorBehaviour;
@@ -41,29 +35,6 @@ public class InitiatorAgent extends BaseAgent{
 		{
 			addBehaviour(new InitiatorBehaviour(prod));
 		}
-	}
-	
-	
-	protected Vector<ACLMessage> prepareRequests(ACLMessage msg) {
-		Vector<ACLMessage> v = new Vector<ACLMessage>();
-		// ...
-		return v;
-	}
-
-	protected void handleAgree(ACLMessage agree) {
-		// ...
-	}
-
-	protected void handleRefuse(ACLMessage refuse) {
-		// ...
-	}
-
-	protected void handleInform(ACLMessage inform) {
-		// ...
-	}
-
-	protected void handleFailure(ACLMessage failure) {
-		// ...
 	}
 
 	@Override
