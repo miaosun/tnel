@@ -117,7 +117,7 @@ public class InitiatorBehaviour extends BaseBehaviour{
 	}
 
 	public void getPropose() {
-		System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator]: Geting Proposals...");
+		System.out.println("[Product: "+prod.getProductName()+"]\n"+ia.getLocalName()+" [Initiator]: Getting Proposals...");
 		//se passar timeout, state = END;
 		//se nao, defina o preco base da iteracao como o valor vencidor da iteracao anterior, e state = CFP
 		/*
